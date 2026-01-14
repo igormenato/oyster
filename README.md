@@ -1,5 +1,51 @@
 # oyster
 
+A custom bootc operating system built from the [finpilot template](https://github.com/projectbluefin/finpilot), based on [Universal Blue](https://universal-blue.org/) and [Bluefin](https://projectbluefin.io). Designed for flexibility, maintainability, and easy customization using GitHub Copilot.
+
+## What Makes Oyster Different?
+
+Oyster is built on **Fedora Silverblue** (GNOME desktop) using the multi-stage bootc architecture. Here's what's included:
+
+### Current Configuration (from template)
+
+**Base Image**: `ghcr.io/ublue-os/silverblue-main:latest`
+- Fedora-based immutable OS
+- GNOME desktop environment
+- Full bootc container support
+
+**Runtime Applications (Homebrew)**:
+- Modern CLI tools: `bat`, `eza`, `fd`, `ripgrep`
+- Development tools: `gh`, `git`
+- Shell enhancements: `starship`, `zoxide`
+- System utilities: `htop`, `tmux`
+
+**GUI Applications (Flatpak)**:
+- Web: Firefox, Thunderbird
+- GNOME Core Apps: Calculator, Calendar, Text Editor, Files, Maps, Weather, and more
+- Graphics: Pinta, Clapper media player
+- System Tools: Flatseal, Extension Manager, Warehouse, Mission Center
+- Universal Blue specific: DistroShelf, Bazaar, Refine
+
+**System Features**:
+- Podman socket enabled for container management
+- Homebrew integration for CLI tools
+- Automated Flatpak installation on first boot
+- Custom ujust commands for easy system management
+
+### Customization Ready
+
+This OS is ready to be customized! Add your own:
+- System packages in `build/10-build.sh`
+- CLI tools in `custom/brew/*.Brewfile`
+- GUI apps in `custom/flatpaks/*.preinstall`
+- Custom commands in `custom/ujust/*.just`
+
+*Last updated: 2026-01-14*
+
+---
+
+## About the finpilot Template
+
 A template for building custom bootc operating system images based on the lessons from [Universal Blue](https://universal-blue.org/) and [Bluefin](https://projectbluefin.io). It is designed to be used manually, but is optimized to be bootstraped by GitHub Copilot. After set up you'll have your own custom Linux. 
 
 This template uses the **multi-stage build architecture** from , combining resources from multiple OCI containers for modularity and maintainability. See the [Architecture](#architecture) section below for details.
@@ -78,8 +124,17 @@ Important: Change `finpilot` to your repository name in these 6 files:
 
 ### 3. Enable GitHub Actions
 
+#### Step 3.1: Enable Workflows
 - Go to the "Actions" tab in your repository
 - Click "I understand my workflows, go ahead and enable them"
+
+#### Step 3.2: Configure Workflow Permissions
+To allow GitHub Actions to push container images to GitHub Container Registry:
+- Go to Settings → Actions → General
+- Scroll to "Workflow permissions"
+- Select "Read and write permissions"
+- Check "Allow GitHub Actions to create and approve pull requests" (optional, but recommended)
+- Click "Save"
 
 Your first build will start automatically! 
 
