@@ -13,6 +13,17 @@ set -eoux pipefail
 # shellcheck source=/dev/null
 source /ctx/build/copr-helpers.sh
 
+# Enable nullglob for all glob operations to prevent failures on empty matches
+shopt -s nullglob
+
+echo "::group:: Copy Bluefin Config from Common"
+
+# Copy just files from @projectbluefin/common (includes 00-entry.just which imports 60-custom.just)
+mkdir -p /usr/share/ublue-os/just/
+cp -r /ctx/oci/common/bluefin/usr/share/ublue-os/just/* /usr/share/ublue-os/just/ 2>/dev/null || true
+
+echo "::groupend::"
+
 echo "::group:: Copy Custom Files"
 
 # Copy OCI brew files (Homebrew integration)
@@ -26,7 +37,6 @@ mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
 # Consolidate Just Files
-mkdir -p /usr/share/ublue-os/just/
 find /ctx/custom/ujust -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
 
 # Copy Flatpak preinstall files
@@ -34,6 +44,9 @@ mkdir -p /etc/flatpak/preinstall.d/
 cp /ctx/custom/flatpaks/*.preinstall /etc/flatpak/preinstall.d/
 
 echo "::groupend::"
+
+# Restore default glob behavior
+shopt -u nullglob
 
 echo "::group:: Install Packages"
 
