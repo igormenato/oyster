@@ -126,13 +126,19 @@ jobs:
           done
 
       # Rechunk image for optimized bootc updates (5-10x smaller updates)
+      # Uses rpm-ostree to rechunk the image layers for smaller updates
       - name: Rechunk Image
         run: |
+          # Pull the rechunking tool image
+          sudo podman pull quay.io/coreos/rpm-ostree:latest
+          
+          # Run rechunk using rpm-ostree container
           sudo podman run --rm --privileged \
-            -v /var/lib/containers:/var/lib/containers \
-            --entrypoint /usr/libexec/bootc-base-imagectl \
-            "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
-            rechunk --max-layers 96 \
+            -v /var/lib/containers:/var/lib/containers:rw \
+            --security-opt label=disable \
+            quay.io/coreos/rpm-ostree:latest \
+            ex container rechunk \
+            --max-layers 96 \
             "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
             "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
 
