@@ -48,7 +48,7 @@ This OS is ready to be customized! Add your own:
 
 A template for building custom bootc operating system images based on the lessons from [Universal Blue](https://universal-blue.org/) and [Bluefin](https://projectbluefin.io). It is designed to be used manually, but is optimized to be bootstraped by GitHub Copilot. After set up you'll have your own custom Linux. 
 
-This template uses the **multi-stage build architecture** from , combining resources from multiple OCI containers for modularity and maintainability. See the [Architecture](#architecture) section below for details.
+This template uses the **multi-stage build architecture** from @projectbluefin/distroless, combining resources from multiple OCI containers for modularity and maintainability. See the [Architecture](#architecture) section below for details.
 
 **Unlike previous templates, you are not modifying Bluefin and making changes.**: You are assembling your own Bluefin in the same exact way that Bluefin, Aurora, and Bluefin LTS are built. This is way more flexible and better for everyone since the image-agnostic and desktop things we love about Bluefin lives in @projectbluefin/common. 
 
@@ -113,14 +113,14 @@ Click "Use this template" to create a new repository from this template.
 
 ### 2. Rename the Project
 
-Important: Change `finpilot` to your repository name in these 6 files:
+Important: Change `finpilot` to `oyster` in these 6 files:
 
-1. `Containerfile` (line 4): `# Name: your-repo-name`
-2. `Justfile` (line 1): `export image_name := env("IMAGE_NAME", "your-repo-name")`
-3. `README.md` (line 1): `# your-repo-name`
-4. `artifacthub-repo.yml` (line 5): `repositoryID: your-repo-name`
-5. `custom/ujust/README.md` (~line 175): `localhost/your-repo-name:stable`
-6. `.github/workflows/clean.yml` (line 23): `packages: your-repo-name`
+1. `Containerfile` (line 4): `# Name: oyster`
+2. `Justfile` (line 1): `export image_name := env("IMAGE_NAME", "oyster")`
+3. `README.md` (line 1): `# oyster`
+4. `artifacthub-repo.yml` (line 5): `repositoryID: oyster`
+5. `custom/ujust/README.md` (~line 175): `localhost/oyster:stable`
+6. `.github/workflows/clean.yml` (line 23): `packages: oyster`
 
 ### 3. Enable GitHub Actions
 
@@ -173,7 +173,7 @@ All changes should be made via pull requests:
 
 Switch to your image:
 ```bash
-sudo bootc switch ghcr.io/your-username/your-repo-name:stable
+sudo bootc switch ghcr.io/igormenato/oyster:stable
 sudo systemctl reboot
 ```
 
@@ -318,7 +318,7 @@ Your workflow will:
 
 Users can verify your images with:
 ```bash
-cosign verify --key cosign.pub ghcr.io/your-username/your-repo-name:stable
+cosign verify --key cosign.pub ghcr.io/igormenato/oyster:stable
 ```
 
 ## Detailed Guides
