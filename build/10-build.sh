@@ -34,6 +34,11 @@ echo "::group:: Install Packages"
 # Install packages using dnf5
 # Example: dnf5 install -y tmux
 
+# Install DNF groups
+dnf5 groupinstall -y development-tools
+dnf5 groupinstall -y c-development
+dnf5 groupinstall -y container-management
+
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
 
