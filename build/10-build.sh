@@ -58,7 +58,7 @@ dnf5 group install -y development-tools
 dnf5 group install -y c-development
 dnf5 group install -y container-management
 
-dnf5 install -y distrobox fish zsh tmux fastfetch
+dnf5 install -y distrobox fish zsh fastfetch
 
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
