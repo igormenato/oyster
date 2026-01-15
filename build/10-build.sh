@@ -15,6 +15,12 @@ source /ctx/build/copr-helpers.sh
 
 echo "::group:: Copy Custom Files"
 
+# Copy OCI brew files (Homebrew integration)
+if [[ -d /ctx/oci/brew ]]; then
+    cp -r /ctx/oci/brew/usr/* /usr/
+    cp -r /ctx/oci/brew/etc/* /etc/ 2>/dev/null || true
+fi
+
 # Copy Brewfiles to standard location
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
