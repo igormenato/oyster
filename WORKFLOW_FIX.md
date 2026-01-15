@@ -60,6 +60,27 @@ To:
             "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
 ```
 
+## Applying the Fix
+
+### Option 1: Apply the Patch
+
+A patch file has been created (`rechunk-fix.patch`) that can be applied to PR #2:
+
+```bash
+# Checkout the feature/rechunk-image branch
+git checkout feature/rechunk-image
+
+# Apply the patch
+git am rechunk-fix.patch
+
+# Push the fix
+git push origin feature/rechunk-image
+```
+
+### Option 2: Manual Fix
+
+Manually edit `.github/workflows/build.yml` line 134 to add `containers-storage:` prefix as shown above.
+
 ## Why This Works
 
 - **`containers-storage:`** - This transport tells Podman to look for the image in its local container storage (`/var/lib/containers`) rather than trying to pull from a remote registry
