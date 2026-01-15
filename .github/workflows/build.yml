@@ -131,7 +131,7 @@ jobs:
           sudo podman run --rm --privileged \
             -v /var/lib/containers:/var/lib/containers \
             --entrypoint /usr/libexec/bootc-base-imagectl \
-            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+            "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
             rechunk --max-layers 96 \
             "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
             "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
