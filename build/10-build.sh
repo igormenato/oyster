@@ -27,7 +27,7 @@ find /ctx/custom/ujust -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>
 mkdir -p /etc/flatpak/preinstall.d/
 cp /ctx/custom/flatpaks/*.preinstall /etc/flatpak/preinstall.d/
 
-echo "::endgroup::"
+echo "::groupend::"
 
 echo "::group:: Install Packages"
 
@@ -37,7 +37,21 @@ echo "::group:: Install Packages"
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
 
-echo "::endgroup::"
+echo "::groupend::"
+
+echo "::group:: Flatpak Patching"
+
+# Patch flatpak for Fedora >= 42 (temporary workaround until preinstall lands in Fedora)
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
+    dnf -y copr enable ublue-os/flatpak-test
+    dnf -y copr disable ublue-os/flatpak-test
+    dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+    dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+    dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+    dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test install flatpak-debuginfo flatpak-libs-debuginfo flatpak-session-helper-debuginfo
+fi
+
+echo "::groupend::"
 
 echo "::group:: System Configuration"
 
@@ -45,6 +59,6 @@ echo "::group:: System Configuration"
 systemctl enable podman.socket
 # Example: systemctl mask unwanted-service
 
-echo "::endgroup::"
+echo "::groupend::"
 
 echo "Custom build complete!"
