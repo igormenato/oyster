@@ -126,21 +126,17 @@ jobs:
           done
 
       # Rechunk image for optimized bootc updates (5-10x smaller updates)
-      # Uses rpm-ostree to rechunk the image layers for smaller updates
+      # Uses bootc-base-imagectl from the bootc base image
       - name: Rechunk Image
         run: |
-          # Pull the rechunking tool image
-          sudo podman pull quay.io/coreos/rpm-ostree:latest
-          
-          # Run rechunk using rpm-ostree container
           sudo podman run --rm --privileged \
-            -v /var/lib/containers:/var/lib/containers:rw \
-            --security-opt label=disable \
-            quay.io/coreos/rpm-ostree:latest \
-            ex container rechunk \
-            --max-layers 96 \
-            "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
-            "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
+            -v /var/lib/containers:/var/lib/containers \
+            --entrypoint /usr/libexec/bootc-base-imagectl \
+            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+            rechunk \
+            --max-layers 67 \
+            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
       # Creates a detailed inventory of all software components in the image for supply chain security.
