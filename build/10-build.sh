@@ -30,6 +30,9 @@ echo "::group:: Copy Custom Files"
 if [[ -d /ctx/oci/brew ]]; then
     cp -r /ctx/oci/brew/usr/* /usr/
     cp -r /ctx/oci/brew/etc/* /etc/ 2>/dev/null || true
+    # Copy Homebrew tarball for first-boot extraction
+    mkdir -p /usr/share
+    cp /ctx/oci/brew/usr/share/homebrew.tar.zst /usr/share/ 2>/dev/null || true
 fi
 
 # Copy Brewfiles to standard location
@@ -81,7 +84,8 @@ echo "::group:: System Configuration"
 
 # Enable/disable systemd services
 systemctl enable podman.socket
-# Example: systemctl mask unwanted-service
+# Homebrew services (preset enables based on 01-homebrew.preset)
+systemctl preset brew-setup.service brew-update.timer brew-upgrade.timer
 
 echo "::groupend::"
 
