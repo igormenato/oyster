@@ -17,13 +17,13 @@ In the rechunk step (`.github/workflows/build.yml` line 134), the workflow attem
 sudo podman run --rm --privileged \
   -v /var/lib/containers:/var/lib/containers \
   --entrypoint /usr/libexec/bootc-base-imagectl \
-  "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+  "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \           # Line 134 - This is the problem!
   rechunk --max-layers 96 \
   "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
   "containers-storage:localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
 ```
 
-The problem is on line 4: `"localhost/${IMAGE_NAME}:${DEFAULT_TAG}"`
+The problem is the image reference `"localhost/${IMAGE_NAME}:${DEFAULT_TAG}"` on line 134 of the workflow file (shown above as the 4th line in the command).
 
 When Podman sees an image reference without a transport prefix, it assumes `docker://`, which means it tries to pull the image from a Docker registry at `localhost`. Since no registry is running on localhost, this fails.
 
